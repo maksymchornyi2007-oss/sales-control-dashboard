@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import { 
   LayoutDashboard, MessageSquare, Activity, Settings, 
   Search, ShieldAlert, TrendingUp, Bell, Zap, 
-  AlertTriangle, CheckCircle2, RefreshCw, ChevronRight, Star
+  AlertTriangle, RefreshCw, ChevronRight, Star
 } from 'lucide-react';
 
 // Твої ключі Supabase
@@ -296,29 +296,13 @@ export default function App() {
                         </ul>
                       </div>
 
-                      <div className="bg-emerald-500/[0.02] p-5 rounded-xl border border-emerald-500/10 relative overflow-hidden">
-                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500"></div>
-                        <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-3 flex items-center space-x-2">
-                          <CheckCircle2 className="w-4 h-4" /> <span>Позитивні моменти</span>
-                        </h4>
-                        <ul className="list-disc pl-5 text-sm text-slate-300 space-y-2">
-                          {selectedAudit.good_points ? (
-                            Array.isArray(selectedAudit.good_points) ? (
-                              selectedAudit.good_points.map((pt, i) => <li key={i}>{pt}</li>)
-                            ) : (
-                              <li>{selectedAudit.good_points}</li>
-                            )
-                          ) : <li className="text-slate-500 italic list-none">Немає даних</li>}
-                        </ul>
-                      </div>
-
                       <div className="bg-indigo-500/[0.02] p-5 rounded-xl border border-indigo-500/20 relative overflow-hidden shadow-[0_0_20px_rgba(99,102,241,0.05)]">
                         <div className="absolute left-0 top-0 bottom-0 w-1 bg-indigo-500"></div>
                         <h4 className="text-xs font-bold uppercase tracking-wider text-indigo-400 mb-3 flex items-center space-x-2">
-                          <Zap className="w-4 h-4" /> <span>AI Рекомендація: Як треба було відповісти</span>
+                          <Zap className="w-4 h-4" /> <span>Вердикт AI та рекомендації</span>
                         </h4>
-                        <div className="p-4 bg-[#0a0a0f]/50 rounded-lg border border-white/5 text-sm text-indigo-200 leading-relaxed italic">
-                          "{selectedAudit.ideal_response || 'Дані відсутні'}"
+                        <div className="p-4 bg-[#0a0a0f]/50 rounded-lg border border-white/5 text-sm text-indigo-200 leading-relaxed">
+                          {selectedAudit.verdict || 'Дані відсутні'}
                         </div>
                       </div>
                     </div>
