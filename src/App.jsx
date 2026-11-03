@@ -5,7 +5,6 @@ import {
   Search, ShieldAlert, Zap, ArrowUpRight, MessageSquare, RefreshCw
 } from 'lucide-react';
 
-// Ініціалізація Supabase клієнта з твоїми ключами
 const SUPABASE_URL = 'https://zyzjivlzqdzvalsdkhab.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_5pVD88-qcwS_-UMwnOFIqA_jTK4G1JI';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -16,7 +15,6 @@ export default function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedAudit, setSelectedAudit] = useState(null);
 
-  // Отримання даних з Supabase
   const fetchAudits = async () => {
     setLoading(true);
     const { data, error } = await supabase
@@ -38,7 +36,6 @@ export default function App() {
   useEffect(() => {
     fetchAudits();
 
-    // Підписка на нові записи в реальному часі (Realtime)
     const channel = supabase
       .channel('chat_audits_changes')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_audits' }, (payload) => {
@@ -51,7 +48,6 @@ export default function App() {
     };
   }, []);
 
-  // Метрики
   const totalAudits = audits.length;
   const avgScore = totalAudits > 0 
     ? (audits.reduce((acc, item) => acc + (item.overall_score || 0), 0) / totalAudits).toFixed(1) 
@@ -71,7 +67,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans flex flex-col">
-      {/* Top Navigation */}
       <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -93,9 +88,7 @@ export default function App() {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-6 py-8 flex flex-col gap-8">
-        {/* KPI Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <div className="bg-slate-900/60 border border-slate-800/80 p-5 rounded-2xl flex items-center justify-between">
             <div>
@@ -128,9 +121,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* Workspace: Feed & Detail */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1 min-h-[500px]">
-          {/* Audit List */}
           <div className="lg:col-span-5 bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 flex flex-col gap-4">
             <div className="relative">
               <Search className="w-4 h-4 absolute left-3 top-3 text-slate-500" />
@@ -178,7 +169,6 @@ export default function App() {
             </div>
           </div>
 
-          {/* Audit Details */}
           <div className="lg:col-span-7 bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 flex flex-col justify-between">
             {selectedAudit ? (
               <div className="space-y-6">
@@ -218,3 +208,56 @@ export default function App() {
                   <div>
                     <h4 className="text-xs font-semibold uppercase tracking-wider text-rose-400 mb-2 flex items-center space-x-1.5">
                       <AlertTriangle className="w-3.5 h-3.5" />
+                      <span>Критичні помилки</span>
+                    </h4>
+                    <ul className="list-disc pl-4 text-sm text-slate-300 space-y-1">
+                      {selectedAudit.mistakes ? (
+                        Array.isArray(selectedAudit.mistakes) ? (
+                          selectedAudit.mistakes.map((err, i) => <li key={i}>{err}</li>)
+                        ) : (
+                          <li>{selectedAudit.mistakes}</li>
+                        )
+                      ) : (
+                        <li className="text-slate-500 italic list-none">Не виявлено</li>
+                      )}
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h4 className="text-xs font-semibold uppercase tracking-wider text-emerald-400 mb-2 flex items-center space-x-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <span>Позитивні моменти</span>
+                    </h4>
+                    <ul className="list-disc pl-4 text-sm text-slate-300 space-y-1">
+                      {selectedAudit.good_points ? (
+                        Array.isArray(selectedAudit.good_points) ? (
+                          selectedAudit.good_points.map((pt, i) => <li key={i}>{pt}</li>)
+                        ) : (
+                          <li>{selectedAudit.good_points}</li>
+                        )
+                      ) : (
+                        <li className="text-slate-500 italic list-none">Не виявлено</li>
+                      )}
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h4 className="text-xs font-semibold uppercase tracking-wider text-indigo-400 mb-2">Як треба було відповісти</h4>
+                    <div className="bg-indigo-950/20 p-4 rounded-xl border border-indigo-500/20 text-sm text-indigo-200">
+                      {selectedAudit.ideal_response || 'Дані відсутні'}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="h-full flex flex-col items-center justify-center text-slate-500 space-y-3">
+                <BarChart3 className="w-12 h-12 opacity-20" />
+                <p className="text-sm">Оберіть аудит зі списку для перегляду деталей</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
