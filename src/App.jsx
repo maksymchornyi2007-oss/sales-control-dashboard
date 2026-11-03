@@ -7,8 +7,8 @@ import {
 } from 'lucide-react';
 
 // Твої ключі Supabase
-const SUPABASE_URL = 'https://zyzjivlzqdzvalsdkhab.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_5pVD88-qcwS_-UMwnOFIqA_jTK4G1JI'; 
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 export default function App() {
