@@ -8,7 +8,7 @@ import {
 
 // Твої ключі Supabase
 const SUPABASE_URL = 'https://zyzjivlzqdzvalsdkhab.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_5pVD88-qcwS_-UMwnOFIqA_jTK4G1JI';
+const SUPABASE_ANON_KEY = 'sb_publishable_5pVD88-qcwS_-UMwnOFIqA_jTK4G1JI'; 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 export default function App() {
